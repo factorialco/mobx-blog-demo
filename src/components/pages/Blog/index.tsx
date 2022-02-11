@@ -1,21 +1,28 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import {observer} from 'mobx-react'
+import { BlogStore } from './../../store/BlogStore';
 
-const Blog: React.FC = ()=>{
-  const blog = {id: 3433, title: "title 3433", content: "content 3433"}
+export const Blog: React.FC = observer(()=>{
+  let { id } = useParams();
+  const blogStore = BlogStore
+  const blog = blogStore.findPostById(id)
 
-  const handleDelete = (id: number | undefined) =>{
-    console.log(id)
+
+  const handleDelete = (id: string | undefined) =>{
+    blogStore.deletePost(id)
   }
-  
+  const handleLike = (id: string | undefined) => {
+    blogStore.likePost(id)
+  }
+
   return <div>
   <h3>{blog?.title}</h3>
   <p>{blog?.content}</p>
   <div>
     <Link to={`/blog/update/${blog?.id}`}><button>update</button></Link>
-    <button onClick={()=> handleDelete(blog?.id)}>delete</button>
+    <button onClick={() => handleDelete(blog?.id)}>delete</button>
+    <button onClick={()=> handleLike(blog?.id)}>like</button>
   </div>
 </div>
-}
-
-export default Blog
+})

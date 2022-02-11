@@ -1,11 +1,15 @@
 import React, {useState} from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import {observer} from 'mobx-react'
 import { IBlogForm } from '../Posts/components/BlogForm';
+import { BlogStore } from '../../store/BlogStore';
 
-export const UpdatePost:React.FC<IBlogForm> = ()=>{
-  const blog = {id: 3433, title: "title 3433", content: "content 3433"}
+export const UpdatePost:React.FC<IBlogForm> = observer(()=>{
+   let { id } = useParams();
+  const blog = BlogStore.findPostById(id)
+
   const navigate = useNavigate()
-  
+
   const [state, setState] = useState({
     title: blog?.title || '',
     content: blog?.content || ''
@@ -18,9 +22,16 @@ export const UpdatePost:React.FC<IBlogForm> = ()=>{
   const handleOnSubmit = (e: any )=>{
     e.preventDefault()
     if (blog && state.title !== "") {
-      console.log(state)
+      BlogStore.updatePost(blog.id, state.title, state.content)
       return  navigate(`/`)
     }
+  }
+
+  if (!blog) {
+    return (<div>
+      <p>No blog found</p>
+      <Link to="/" />
+      </div>)
   }
 
   return <div>
@@ -28,13 +39,16 @@ export const UpdatePost:React.FC<IBlogForm> = ()=>{
       <div>
         <input name="title" type="text" value={state.title} onChange={handleOnChange} placeholder="title"/>
       </div>
+
       <div>
         <textarea name="content" value={state.content} onChange={handleOnChange} placeholder="title">
         </textarea>
       </div>
+
       <div><button onClick={handleOnSubmit}>Submit</button></div>
     </form>
   </div>
-}
+})
+
 
 

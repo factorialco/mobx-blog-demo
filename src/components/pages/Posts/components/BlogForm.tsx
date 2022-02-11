@@ -1,9 +1,10 @@
 import React from 'react'
 import {useState} from 'react'
+import { BlogPost } from '../../../store/BlogStore';
 
 export interface IBlogForm {
   handleOnSubmit?: any;
-  initialData?: any;
+  initialData?: BlogPost;
 }
 export const BlogForm: React.FC<IBlogForm> = ({handleOnSubmit, initialData})=>{
 
@@ -20,14 +21,17 @@ export const BlogForm: React.FC<IBlogForm> = ({handleOnSubmit, initialData})=>{
     setState({title: '', content: ''})
   }
 
-  return (<form>
+  return  <form>
       <div>
-        <input name="title" type="text" value={state.title} onChange={handleOnChange} placeholder="title"/>
+        <input name="title" type="text" value={state.title} onChange={handleOnChange} placeholder="title" required/>
       </div>
+
       <div>
-        <textarea name="content" value={state.content} onChange={handleOnChange} placeholder="content">
+        <textarea name="content" value={state.content} onChange={handleOnChange} placeholder="content" required>
         </textarea>
       </div>
-      <div><button onClick={(e)=> handleOnSubmit(e, state, resetForm)}>Submit</button></div>
-    </form>)
+
+      <div><button type="submit" onClick={(e)=> handleOnSubmit(e, state, resetForm)}>Submit</button></div>
+
+    </form>
 }
