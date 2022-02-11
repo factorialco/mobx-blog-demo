@@ -1,7 +1,7 @@
-import { makeObservable, observable, action, computed } from "mobx"
 import { v4 as uuidv4 } from 'uuid';
+import { makeObservable, observable, action, computed } from "mobx"
 
-export interface BlogPost {
+export interface IBlogPost {
   id: string;
   title: string;
   content: string;
@@ -9,9 +9,9 @@ export interface BlogPost {
 }
 
 export class BlogModel {
-  posts: BlogPost[] = []
+  posts: IBlogPost[] = []
 
-  constructor(){
+  constructor() {
     makeObservable(this, {
       posts: observable,
       createPost: action,
@@ -23,11 +23,11 @@ export class BlogModel {
     })
   }
 
-  private getIndex(id:string | undefined) {
-    return this.posts.findIndex(post => post.id === id)
+  private getPost(id: string | undefined) {
+    return this.posts.find(post => post.id === id)
   }
-  createPost(title: string, content: string){
-    const post: BlogPost = {
+  createPost(title: string, content: string) {
+    const post: IBlogPost = {
       id: uuidv4(),
       title,
       content,
@@ -35,37 +35,28 @@ export class BlogModel {
     }
     this.posts.push(post)
   }
-
-  updatePost(id: string, title: string, content:string){
-    const index = this.getIndex(id)
-    if(index > -1){
-      this.posts[index].title = title
-      this.posts[index].content = content
+  updatePost(id: string, title: string, content: string) {
+    const post = this.getPost(id)
+    if (post) {
+      post.title = title
+      post.content = content
     }
   }
-
-  deletePost(id:string | undefined){
-    const index = this.getIndex(id)
-    if(index > -1) this.posts.splice(index,1)
+  deletePost(id: string | undefined) {
+    const index = this.posts.findIndex(post => post.id === id)
+    if (index > -1) this.posts.splice(index, 1)
   }
-  likePost(id: string | undefined){
-    if (id === undefined) return null
-    const post = this.posts.find(item => item.id === id)
-    if(post) post.likes += 1
+  findPostById(id: string | undefined) {
+    return this.getPost(id)
   }
-
-  findPostById(id: string | undefined ){
-    if(id === undefined) return null
-
-    return this.posts.find(item => item.id === id)
+  likePost(id: string | undefined) {
+    const post = this.getPost(id)
+    if (post) post.likes += 1
   }
-
   get totalLikes() {
     let totalLikes = this.posts.reduce((count, post) => count + post.likes, 0);
-
     return totalLikes;
   }
-
 }
 
-export const BlogStore = new BlogModel()
+export const blogStore = new BlogModel()
