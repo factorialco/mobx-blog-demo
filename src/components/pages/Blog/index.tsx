@@ -1,21 +1,25 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
-
-const Blog: React.FC = ()=>{
-  const blog = {id: 3433, title: "title 3433", content: "content 3433"}
-
-  const handleDelete = (id: number | undefined) =>{
-    console.log(id)
+import { Link, useParams, useNavigate } from 'react-router-dom';
+export const Blog: React.FC = () => {
+  const navigate = useNavigate()
+  const { id } = useParams()
+  const blog = {
+    id,
+    title: `Title ${id}`,
+    content: `Content ${id}`
   }
-  
-  return <div>
-  <h3>{blog?.title}</h3>
-  <p>{blog?.content}</p>
-  <div>
-    <Link to={`/blog/update/${blog?.id}`}><button>update</button></Link>
-    <button onClick={()=> handleDelete(blog?.id)}>delete</button>
-  </div>
-</div>
-}
 
-export default Blog
+  const handleDelete = (id: any) => {
+    console.log(id)
+    navigate('/')
+  }
+
+  return (<div>
+    <h3>{blog?.title}</h3>
+    <p>{blog?.content}</p>
+    <div>
+      <Link to={`/blog/update/${blog?.id}`}><button>update</button></Link>
+      <button onClick={() => handleDelete(blog?.id)}>delete</button>
+    </div>
+  </div>)
+}
