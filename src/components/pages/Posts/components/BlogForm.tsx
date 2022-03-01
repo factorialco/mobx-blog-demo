@@ -5,6 +5,10 @@ export interface IBlogForm {
   handleOnSubmit?: any;
   initialData?: any;
 }
+export interface IFormData {
+  title: string;
+  content: string;
+}
 export const BlogForm: React.FC<IBlogForm> = ({handleOnSubmit, initialData})=>{
 
     const [state, setState] = useState({

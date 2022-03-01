@@ -1,30 +1,62 @@
 import React from 'react'
-import BlogCard from './components/BlogCard'
-import { BlogForm } from './components/BlogForm'
+import { BlogForm, IFormData } from './components/BlogForm'
 
+import { v4 as uuidv4 } from 'uuid';
+import { useLocalObservable, Observer } from 'mobx-react';
 
+export interface IBlogPost {
+  id: string;
+  title: string;
+  content: string;
+}
 export const Posts:React.FC = ()=>{
-  const blogPosts = [
-    { id: 3433, title: "title 3433", content: "content 3433" },
-    { id: 3434, title: "title 3434", content: "content 3434" }
-  ]
+  const store = useLocalObservable(() => ({
+    posts: [] as IBlogPost[],
 
-  const handleOnSubmit = (e: any, data: any, resetForm: any )=>{
+    createPost(title: string, content: string) {
+      const post: IBlogPost = {
+        id: uuidv4(),
+        title,
+        content
+      }
+      this.posts.push(post)
+    },
+
+    deletePost(id: string | undefined) {
+      const index = this.posts.findIndex(post => post.id === id)
+      if (index > -1) this.posts.splice(index, 1)
+    }
+    
+  }))
+
+  const handleOnSubmit = (e: any, data: IFormData, resetForm: any) => {
     e.preventDefault()
+
     if (data.title !== "") {
-      console.log(data)
-      
-      resetForm()    
+      store.createPost(data.title, data.content)
+      resetForm()
     }
   }
 
-  return <div>
-    <h1>All post</h1>
-    <BlogForm handleOnSubmit={handleOnSubmit} />
-    <div>
-      {blogPosts.map(blog => <BlogCard key={blog.id} blog={blog}/>)}
-    </div>
-  </div>
+  return <Observer>
+    {() => (
+      <div>
+        <h1>All post</h1>
+        <BlogForm handleOnSubmit={handleOnSubmit} />
+        <div>
+          {store.posts.map(blog => (
+            <div key={blog.id}>
+              <h3>{blog.title}</h3>
+              <p>{blog.content}</p>
+              <div>
+                <button onClick={() => store.deletePost(blog.id)}>delete</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+  </Observer>
 }
 
 
