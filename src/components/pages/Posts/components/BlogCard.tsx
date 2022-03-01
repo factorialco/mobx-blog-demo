@@ -1,24 +1,24 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 
-interface Blog{
-blog: any
+import { useBlogStore } from '../../../store/BlogStoreContext';
+import { IBlogPost } from '../../../store/BlogStore';
+
+interface IBlog {
+  blog: IBlogPost
 }
+export const BlogCard: React.FC<IBlog> = ({ blog }) => {
+  const store = useBlogStore()
 
-const BlogCard: React.FC<Blog> = ({blog})=>{
-
-  const handleDelete = (id: number) =>{
-    console.log(id)
-  }
-return <div>
-  <h3><Link to={`/blog/${blog.id}`}>{blog.title}</Link></h3>
-  <p>{blog.content}</p>
-  <div>
-
-    <Link to={`/blog/update/${blog.id}`}><button>update</button></Link>
-    <button onClick={()=> handleDelete(blog.id)}>delete</button>
-  </div>
-</div>
+  return (
+    <div>
+      <h3><Link to={`/blog/${blog.id}`}>{blog.title}</Link></h3>
+      <p>{blog.content}</p>
+      <div>
+        <Link to={`/update/${blog.id}`}><button>update</button></Link>
+        <button onClick={() => store.deletePost(blog.id)}>delete</button>
+        <button onClick={() => store.likePost(blog.id)}>like</button>
+      </div>
+    </div>
+  )
 }
-
-export default BlogCard

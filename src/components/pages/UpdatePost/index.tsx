@@ -1,41 +1,48 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
+import { ChangeEvent, FormEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
-import { IBlogForm } from '../Posts/components/BlogForm';
+import { useBlogStore } from '../../store/BlogStoreContext';
 
-export const UpdatePost: React.FC<IBlogForm> = () => {
+export const UpdatePost: React.FC = () => {
+  const store = useBlogStore()
   const { id } = useParams()
-  const blog = { id, title: `title ${id}`, content: `content ${id}` }
+  const blog = store.findPostById(id)
   const navigate = useNavigate()
-  
+
   const [state, setState] = useState({
+    id: blog?.id || '',
     title: blog?.title || '',
     content: blog?.content || ''
   })
 
-  const handleOnChange = (e:any)=>{
-    setState({...state, [e.target.name]: e.target.value})
+  const handleOnChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setState({ ...state, [e.target.name]: e.target.value })
   }
 
-  const handleOnSubmit = (e: any )=>{
+  const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
     if (blog && state.title !== "") {
-      console.log(state)
-      return  navigate(`/`)
+      store.updatePost(state.id, state.title, state.content)
+      return navigate(`/`)
     }
   }
 
-  return <div>
-   <form>
-      <div>
-        <input name="title" type="text" value={state.title} onChange={handleOnChange} placeholder="title"/>
-      </div>
-      <div>
-        <textarea name="content" value={state.content} onChange={handleOnChange} placeholder="title">
-        </textarea>
-      </div>
-      <div><button onClick={handleOnSubmit}>Submit</button></div>
-    </form>
-  </div>
+  return (
+    <div>
+      <h2>Update Post</h2>
+      <form onSubmit={handleOnSubmit}>
+        <div>
+          <input name="title" type="text" value={state.title} onChange={handleOnChange} placeholder="title" />
+        </div>
+        <div>
+          <textarea name="content" value={state.content} onChange={handleOnChange} placeholder="title">
+          </textarea>
+        </div>
+        <div><button type="submit">Submit</button></div>
+      </form>
+    </div>
+  )
 }
 
 
