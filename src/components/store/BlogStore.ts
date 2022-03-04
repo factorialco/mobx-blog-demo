@@ -6,8 +6,7 @@ export interface IBlogPost {
   likes: number;
 }
 
-export const createStore = () => {
-  return {
+export const createStore = () => ({
     posts: [] as IBlogPost[],
 
     getIndex(id: string | undefined) {
@@ -56,7 +55,6 @@ export const createStore = () => {
     get allPosts() {
       return this.posts
     }
-  }
-};
+  })
 
-export type TStore = ReturnType<typeof createStore>;
+export type Store = ReturnType<typeof createStore>;

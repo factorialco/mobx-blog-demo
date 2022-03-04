@@ -9,13 +9,13 @@ import { BlogStoreProvider } from './components/store/BlogStoreContext';
 function App() {
   return (
     <BlogStoreProvider>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Posts/>}/>
-        <Route path="/blog/:id" element={<Blog />} />
-        <Route path="/update/:id" element={<UpdatePost />} />
-      </Routes>
-    </BrowserRouter>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Posts/>}/>
+          <Route path="/blog/:id" element={<Blog />} />
+          <Route path="/update/:id" element={<UpdatePost />} />
+        </Routes>
+      </BrowserRouter>
     </BlogStoreProvider>
   );
 }
