@@ -9,7 +9,7 @@ export interface IBlogPost {
   title: string;
   content: string;
 }
-export const Posts:React.FC = ()=>{
+export const Posts = ()=>{
   const store = useLocalObservable(() => ({
     posts: [] as IBlogPost[],
 

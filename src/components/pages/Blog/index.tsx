@@ -1,13 +1,12 @@
 import React from 'react'
 import { Link, useParams } from 'react-router-dom';
 
-const Blog: React.FC = ()=>{
+const Blog = ()=>{
   const { id } = useParams()
   const blog = { id, title: `title ${id}`, content: `content ${id}` }
 
-
   const handleDelete = (id: string | undefined) =>{
-    console.log(id)
+    // Submit action goes here
   }
   
   return <div>

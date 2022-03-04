@@ -19,7 +19,7 @@ export const UpdatePost: React.FC<IBlogForm> = () => {
   const handleOnSubmit = (e: any )=>{
     e.preventDefault()
     if (blog && state.title !== "") {
-      console.log(state)
+      // submit action goes here
       return  navigate(`/`)
     }
   }
