@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import { ChangeEvent, FormEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import { useBlogStore } from '../../store/BlogStoreContext';
 
-export const UpdatePost: React.FC = () => {
+export const UpdatePost = () => {
   const store = useBlogStore()
   const { id } = useParams()
   const blog = store.findPostById(id)
@@ -15,11 +14,11 @@ export const UpdatePost: React.FC = () => {
     content: blog?.content || ''
   })
 
-  const handleOnChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleOnChange = (e: any) => {
     setState({ ...state, [e.target.name]: e.target.value })
   }
 
-  const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleOnSubmit = (e: any) => {
     e.preventDefault()
 
     if (blog && state.title !== "") {

@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useBlogStore } from '../../store/BlogStoreContext';
 
-export const Blog: React.FC = () => {
+export const Blog = () => {
   const store = useBlogStore()
   const { id } = useParams()
   const blog = store.findPostById(id)
