@@ -19,18 +19,18 @@ export const Posts = () => {
 
   return (
     <Observer>
-      {() => (
+      { () => (
         <div>
           <h1>All post</h1>
           <BlogForm handleOnSubmit={handleOnSubmit} />
           <div>
-            {store.allPosts.map(blog => <BlogCard key={blog.id} blog={blog} />)}
+            { store.allPosts.map(blog => <BlogCard key={blog.id} blog={blog} />) }
           </div>
           <div>
-            <h5>Our blogs post is liked {store.totalLikes} times</h5>
+            <h5>Our blog posts have accumulated a total of { store.totalLikes } likes.</h5>
           </div>
         </div>
-      )}
+      ) }
     </Observer>
   )
 }
