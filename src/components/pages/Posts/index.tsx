@@ -3,7 +3,7 @@ import BlogCard from './components/BlogCard'
 import { BlogForm } from './components/BlogForm'
 
 
-export const Posts:React.FC = ()=>{
+export const Posts = ()=>{
   const blogPosts = [
     { id: 3433, title: "title 3433", content: "content 3433" },
     { id: 3434, title: "title 3434", content: "content 3434" }
