@@ -5,7 +5,6 @@ import blogStore from "../../store/blogStore";
 export function Post() {
   const { id } = useParams();
   const post = blogStore.findPostById(id);
-  console.log(post);
 
   return (
     <div className="container w-50">

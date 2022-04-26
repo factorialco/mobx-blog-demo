@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import blogStore from "../../../../store/blogStore";
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 export const PostList = observer(({ posts, isLoading }) => {
   if (isLoading) {
     return <h1>Posts loading</h1>;
@@ -9,8 +9,9 @@ export const PostList = observer(({ posts, isLoading }) => {
 
   return (
     <ul className="list-group list-group-flush">
-      {posts.length > 0 ? (
+      {posts.length > 1 ? (
         posts.map((post) => {
+          if (!post.id) return null;
           return (
             <li className="list-group-item" key={post.id}>
               <h5>{post.title}</h5>

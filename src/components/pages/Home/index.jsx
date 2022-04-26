@@ -1,15 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Form } from "../../common/form";
 import { observer } from "mobx-react-lite";
 import blogStore from "../../store/blogStore";
 import { PostList } from "./components/Posts/PostList";
 
 export const Home = observer(() => {
-  const posts = blogStore.allPosts;
+  const [state, setState] = useState({
+    posts: [],
+    isLoading: true,
+  });
 
   const createAction = (data) => {
     blogStore.addPost(data);
   };
+
+  useEffect(() => {
+    blogStore.allPosts().then((res) => {
+      setState({ isLoading: false, posts: res });
+    });
+  });
 
   return (
     <div className="container w-50 p-3">
@@ -19,7 +28,7 @@ export const Home = observer(() => {
       <div>
         <div className="card">
           <h2 className="card-header p-2">Latest Posts</h2>
-          <PostList posts={posts} />
+          <PostList posts={state.posts} isLoading={state.isLoading} />
         </div>
       </div>
     </div>
