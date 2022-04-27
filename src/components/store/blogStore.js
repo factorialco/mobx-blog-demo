@@ -1,4 +1,4 @@
-import { makeObservable, observable, action, toJS } from "mobx";
+import { makeObservable, observable, action, toJS, runInAction } from "mobx";
 import axios from "axios";
 
 const baseUrl = "http://localhost:3000";
@@ -9,8 +9,8 @@ class BlogModel {
       posts: observable,
       addPost: action,
       deletePost: action,
-      findPostById: action,
       allPosts: action,
+      getPost: action,
     });
   }
   getPost(id) {
@@ -21,33 +21,41 @@ class BlogModel {
       title: post.title,
       body: post.body,
     });
-    this.posts.unshift(res.data);
-  };
-  updatePost = async ({ id, title, body }) => {
-    const post = this.getPost(id);
-    if (post) {
-      post.title = title;
-      post.body = body;
-    }
-    await axios.put(`${baseUrl}/posts/${id}`, {
-      title: post.title,
-      body: post.body,
+    runInAction(() => {
+      this.posts.unshift(res.data);
     });
   };
-  deletePost = async (id) => {
-    const index = this.posts.findIndex((post) => post.id === id);
-    if (index > -1) this.posts.splice(index, 1);
-    await axios.delete(`${baseUrl}/posts/${id}`);
+  updatePost = async ({ id, title, body }) => {
+    console.log(id, title, body);
+    const post = this.getPost(id);
+
+    await axios.put(`${baseUrl}/posts/${id}`, {
+      title: title,
+      body: body,
+    });
+
+    if (post) {
+      runInAction(() => {
+        post.title = title;
+        post.body = body;
+      });
+    }
   };
-  async findPostById(id) {
-    return this.getPost(id);
-  }
+  deletePost = async (id) => {
+    await axios.delete(`${baseUrl}/posts/${id}`);
+    runInAction(() => {
+      const index = this.posts.findIndex((post) => post.id === id);
+      if (index > -1) this.posts.splice(index, 1);
+    });
+  };
+
   async allPosts() {
     if (this.posts.length < 1) {
       const res = await axios.get(`${baseUrl}/posts`);
-      this.posts = res.data.reverse();
+      runInAction(() => {
+        this.posts = res.data.reverse();
+      });
     }
-
     return toJS(this.posts);
   }
 }

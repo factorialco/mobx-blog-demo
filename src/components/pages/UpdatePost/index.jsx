@@ -5,7 +5,7 @@ import blogStore from "../../store/blogStore";
 
 export function UpdatePost() {
   const { id } = useParams();
-  const post = blogStore.findPostById(id);
+  const post = blogStore.getPost(id);
 
   const navigate = useNavigate();
 
